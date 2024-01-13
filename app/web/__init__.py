@@ -17,6 +17,7 @@ from app.web.views import (
 
 def create_app():
     app = Flask(__name__, static_folder="../../client/build")
+    CORS(app)
     app.url_map.strict_slashes = False
     app.config.from_object(Config)
 
@@ -43,7 +44,6 @@ def register_blueprints(app):
 
 
 def register_hooks(app):
-    CORS(app)
     app.before_request(load_logged_in_user)
     app.after_request(add_headers)
     app.register_error_handler(Exception, handle_error)

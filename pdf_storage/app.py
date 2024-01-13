@@ -24,7 +24,7 @@ def upload_file():
     if file.filename == "":
         return jsonify({"message": "No selected file"}, 400)
     if file:
-        filename = secure_filename(file.filename)
+        filename = secure_filename(file.filename) # type: ignore
         print(filename)
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
         return jsonify({"message": f"File {filename} uploaded successfully"}, 200)
