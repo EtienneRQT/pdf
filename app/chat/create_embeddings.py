@@ -24,4 +24,11 @@ def create_embeddings_for_pdf(pdf_id: str, pdf_path: str):
     loader = PyPDFLoader(file_path=pdf_path)
     docs = loader.load_and_split(text_splitter)
 
+    for doc in docs:
+        doc.metadata = {
+            "page": doc.metadata["page"],
+            "text": doc.page_content,
+            "pdf_id": pdf_id,
+        }
+
     vector_store.add_documents(docs)
