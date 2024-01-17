@@ -1,6 +1,5 @@
 from langchain_community.chat_models import ChatOpenAI
-from app.chat.models import ChatArgs
 
 
-def build_llm(chat_args: ChatArgs):
+def build_llm(chat_args):
     return ChatOpenAI(streaming=chat_args.streaming)
