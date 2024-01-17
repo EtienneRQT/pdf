@@ -18,7 +18,13 @@
 </script>
 
 <ErrorModal />
-<div class="container mx-auto h-screen">
+<div class="container md:container md:mx-auto h-screen">
 	<Navbar />
 	<slot />
 </div>
+
+<style>
+    :global(body) {
+        background-color: #040404;
+    }
+</style>

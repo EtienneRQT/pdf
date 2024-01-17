@@ -1,8 +1,7 @@
+import os
 from langchain_community.vectorstores.qdrant import Qdrant
 from qdrant_client import QdrantClient
 from app.chat.embeddings.openai import embeddings
-import os
-
 from app.chat.models import ChatArgs
 
 url = os.getenv("QDRANT_URL")
