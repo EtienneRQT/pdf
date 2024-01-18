@@ -1,10 +1,10 @@
-from langchain_community.llms import Replicate
+from langchain_community.llms.replicate import Replicate
 from langchain_community.llms import Replicate as ReplicateForCondensedQuestion
 from app.chat.models import ChatArgs
 import os
 
 
-os.environ["REPLICATE_API_TOKEN"] = os.getenv("REPLICATE_API_KEY")  # type: ignore
+os.environ["REPLICATE_API_TOKEN"] = os.getenv("REPLICATE_API_TOKEN")  # type: ignore
 
 
 def build_llm(chat_args: ChatArgs):
