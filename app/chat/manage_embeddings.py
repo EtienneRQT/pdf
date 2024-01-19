@@ -18,3 +18,7 @@ def create_embeddings_for_pdf(pdf_id: str, pdf_path: str):
         }
 
     vector_store.add_documents(documents=docs)
+
+
+def delete_embeddings_for_pdf(pdf_id: str):
+    vector_store.delete(filter={"pdf_id": pdf_id})

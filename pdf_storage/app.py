@@ -17,19 +17,31 @@ def allowed_file(filename):
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
-    if "file" not in request.files:
+    if "file" not in request.headers:
         return jsonify({"message": "No file part in the request"}, 400)
     file = request.files["file"]
 
     if file.filename == "":
         return jsonify({"message": "No selected file"}, 400)
     if file:
-        filename = secure_filename(file.filename) # type: ignore
+        filename = secure_filename(file.filename)  # type: ignore
         print(filename)
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
         return jsonify({"message": f"File {filename} uploaded successfully"}, 200)
     else:
         return jsonify({"message": "File type not allowed"}, 400)
+
+
+@app.route(rule="/delete", methods=["DELETE"])
+def delete_file():
+    if "file" not in request.headers:
+        return jsonify({"message": "No file part in the request"}, 400)
+    filename = request.headers["file"]
+    try:
+        os.remove(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+        return jsonify({"message": f"File {filename} deleted successfully"}, 200)
+    except Exception as e:
+        return jsonify({"message": f"Error deleting file: {e}"}, 400)
 
 
 @app.route("/download/<filename>", methods=["GET"])
