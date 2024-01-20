@@ -6,6 +6,7 @@ from app.chat.memories.sql_memory import build_memory
 from app.chat.chains.retrieval import StreamingConversationalRetrievalChain
 
 
+
 def build_chat(chat_args: ChatArgs):
     retriever = build_retriever(chat_args)
     llm = build_llm(chat_args)
@@ -14,9 +15,12 @@ def build_chat(chat_args: ChatArgs):
     )  # ChatOpenAI(streaming=False)
     memory = build_memory(chat_args)
 
+
+
     return StreamingConversationalRetrievalChain.from_llm(
         llm=llm,
         condense_question_llm=condense_question_llm,
         memory=memory,
         retriever=retriever,  # type: ignore
+        metadata=chat_args.metadata,
     )

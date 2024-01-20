@@ -37,7 +37,7 @@ def upload_file(file_id, file_path, file_name):
     return pdf.as_dict()
 
 
-@bp.route("/", methods=["DELETE"])
+@bp.route("/<string:pdf_id>", methods=["DELETE"])
 @login_required
 def delete_file(file_id, file_name):
     res, status_code = files.delete(file_name)

@@ -36,7 +36,11 @@
                             >
                             <th
                                 scope="col"
-                                class="px-6 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase">Action</th
+                                class="px-6 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase">View</th
+                            >
+                            <th
+                                scope="col"
+                                class="px-6 py-3 text-right text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase">Delete</th
                             >
                         </tr>
                     </thead>
@@ -55,6 +59,9 @@
     								<a class="text-blue-600 hover:text-white hover:bg-blue-800 rounded px-2 py-1 transition-colors duration-300" href="/documents/{document.id}">View</a>
 								</td>
 
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+    								<button class="text-red-600 hover:text-white hover:bg-purple-800 rounded px-2 py-1 transition-colors duration-300" >Delete</button>
+								</td>
                             </tr>
                         {/each}
                     </tbody>
