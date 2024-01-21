@@ -1,70 +1,70 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import Chart from 'chart.js/auto';
+    import { onMount } from 'svelte';
+    import Chart from 'chart.js/auto';
 
-	export let data: { [key: string]: number[] };
-	export let startingColor: { r: number; g: number; b: number };
+    export let data: { [key: string]: number[] };
+    export let startingColor: { r: number; g: number; b: number };
 
-	let chartCanvas: HTMLCanvasElement;
+    let chartCanvas: HTMLCanvasElement;
 
-	onMount(() => {
-		const ctx = chartCanvas.getContext('2d');
-		if (!ctx) {
-			return;
-		}
+    onMount(() => {
+        const ctx = chartCanvas.getContext('2d');
+        if (!ctx) {
+            return;
+        }
 
-		const labels = Object.keys(data);
-		const chartValues = Object.values(data).map(
-			(scores) => scores.reduce((a, b) => a + b, 0) / scores.length
-		);
+        const labels = Object.keys(data);
+        const chartValues = Object.values(data).map(
+            (scores) => scores.reduce((a, b) => a + b, 0) / scores.length
+        );
 
-		new Chart(ctx, {
-			type: 'bar',
-			options: {
-				plugins: {
-					legend: { display: false }
-				},
-				scales: {
-					y: {
-						min: -1,
-						max: 1,
-						grid: {
-							lineWidth: ({ tick }) => (tick.value == 0 ? 2 : 1),
-							color: ({ tick }) => (tick.value === 0 ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.1)')
-						},
-						ticks: {
-							stepSize: 0.33,
-							font: {
-								size: 15
-							}
-						}
-					},
-					x: {
-						ticks: {
-							font: {
-								size: 20
-							}
-						}
-					}
-				}
-			},
-			data: {
-				labels: labels,
-				datasets: [
-					{
-						base: 0,
-						label: '',
-						data: chartValues,
-						backgroundColor: generateColors(startingColor, 7, 0.2),
-						borderColor: generateColors(startingColor, 7),
-						borderWidth: 1
-					}
-				]
-			}
-		});
-	});
+        new Chart(ctx, {
+            type: 'bar',
+            options: {
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        min: -1,
+                        max: 1,
+                        grid: {
+                            lineWidth: ({ tick }) => (tick.value == 0 ? 2 : 1),
+                            color: ({ tick }) => (tick.value === 0 ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.1)')
+                        },
+                        ticks: {
+                            stepSize: 0.33,
+                            font: {
+                                size: 15
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 20
+                            }
+                        }
+                    }
+                }
+            },
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        base: 0,
+                        label: '',
+                        data: chartValues,
+                        backgroundColor: generateColors(startingColor, 7, 0.2),
+                        borderColor: generateColors(startingColor, 7),
+                        borderWidth: 1
+                    }
+                ]
+            }
+        });
+    });
 
-	function rgbToHsl(r: number, g: number, b: number) {
+function rgbToHsl(r: number, g: number, b: number) {
 		r /= 255;
 		g /= 255;
 		b /= 255;
@@ -73,7 +73,6 @@
 		let h: number = (max + min) / 2;
 		let s: number = (max + min) / 2;
 		let l: number = (max + min) / 2;
-
 		if (max === min) {
 			h = s = 0; // achromatic
 		} else {
@@ -92,13 +91,10 @@
 			}
 			h /= 6;
 		}
-
 		return [h * 360, s * 100, l * 100];
 	}
-
 	function hslToRgb(h: number, s: number, l: number) {
 		let r, g, b;
-
 		if (s === 0) {
 			r = g = b = l; // achromatic
 		} else {
@@ -116,25 +112,23 @@
 			g = hue2rgb(p, q, h);
 			b = hue2rgb(p, q, h - 1 / 3);
 		}
-
 		return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 	}
-
 	function generateColors(rgb: { r: number; b: number; g: number }, k: number, alpha = 1) {
 		const result = [];
 		const [h, s, l] = rgbToHsl(rgb.r, rgb.g, rgb.b);
 		const increment = 360 / k;
-
 		for (let i = 0; i < k; i++) {
 			let newHue = (h + increment * i) % 360;
 			let [r, g, b] = hslToRgb(newHue / 360, s / 100, l / 100);
 			result.push(`rgb(${r}, ${g}, ${b}, ${alpha})`);
 		}
-
 		return result;
 	}
-
 	const colors = generateColors({ r: 255, g: 99, b: 132 }, 7);
 </script>
 
-<canvas bind:this={chartCanvas} />
+<canvas
+    bind:this={chartCanvas}
+    class="shadow-xl rounded-lg overflow-hidden"
+/>

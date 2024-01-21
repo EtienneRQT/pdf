@@ -47,6 +47,14 @@ const upload = async (file: File) => {
 	}
 };
 
+const deletePdf = async (id: string) => {
+	try {
+		await api.delete(`/pdfs/${id}`);
+	} catch (error) {
+		return set({ error: getErrorMessage(error) });
+	}
+};
+
 const getDocuments = async () => {
 	const { data } = await api.get('/pdfs');
 	set({ data });
