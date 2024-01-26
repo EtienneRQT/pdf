@@ -1,5 +1,5 @@
 import os
-import pinecone
+from pinecone import Pinecone as PineconeClient, ServerlessSpec
 from langchain.vectorstores.pinecone import Pinecone
 from app.chat.embeddings.openai import embeddings
 from app.chat.models import ChatArgs
@@ -8,7 +8,8 @@ from app.chat.models import ChatArgs
 api_key = os.getenv("PINECONE_API_KEY")
 environment = os.getenv("PINECONE_ENV_NAME")
 if api_key and environment:
-    pinecone.init(api_key=api_key, environment=environment)
+    pinecone = PineconeClient(api_key=api_key, environment=environment)
+
 
 index_name = os.getenv("PINECONE_INDEX_NAME")
 if index_name:
