@@ -25,7 +25,7 @@ def load_model(Model: Model, extract_id_lambda=None):
 
             instance = Model.find_by(id=model_id)
 
-            if instance.user_id != g.user.id:  # type: ignore
+            if instance.user_id != g.user.id:
                 raise Unauthorized("You are not authorized to view this.")
 
             if model_id_name in kwargs:
@@ -46,11 +46,6 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
-
-
-def add_headers(response):
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    return response
 
 
 def load_logged_in_user():

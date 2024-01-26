@@ -6,18 +6,12 @@ from typing import Tuple, Dict, Any
 from app.web.config import Config
 
 upload_url = f"{Config.UPLOAD_URL}/upload"
-delete_url = f"{Config.UPLOAD_URL}/delete"
 
 
 def upload(local_file_path: str) -> Tuple[Dict[str, str], int]:
     with open(local_file_path, "rb") as f:
         response = requests.post(upload_url, files={"file": f})
         return json.loads(response.text), response.status_code
-
-
-def delete(filename: str) -> Tuple[Dict[str, str], int]:
-    response = requests.delete(url=delete_url, headers={"file": filename})
-    return json.loads(response.text), response.status_code
 
 
 def create_download_url(file_id):

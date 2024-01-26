@@ -1,11 +1,6 @@
-from flask import Blueprint, g, jsonify, make_response
-from httpx import delete
+from flask import Blueprint, g, jsonify
 from werkzeug.exceptions import Unauthorized
-from app.web.hooks import (
-    login_required,
-    handle_file_upload,
-    load_model,
-)
+from app.web.hooks import login_required, handle_file_upload, load_model
 from app.web.db.models import Pdf
 from app.web.tasks.embeddings import process_document
 from app.web import files
@@ -31,30 +26,14 @@ def upload_file(file_id, file_path, file_name):
 
     pdf = Pdf.create(id=file_id, name=file_name, user_id=g.user.id)
 
-    # Defer this to be processed by the worker
-    process_document.delay(pdf.id)  # type: ignore
+    process_document.delay(pdf.id)
 
     return pdf.as_dict()
 
 
-@bp.route("/<string:pdf_id>", methods=["DELETE"])
-@login_required
-def delete_file(file_id, file_name):
-    res, status_code = files.delete(file_name)
-    if status_code >= 400:
-        return make_response(res, status_code)
-
-    Pdf.delete_by(id=file_id, name=file_name, user_id=g.user.id)
-
-    # Defer this to be processed by the worker
-    delete_document.delay(pdf.id)  # type: ignore
-
-    return make_response("", 204)
-
-
 @bp.route("/<string:pdf_id>", methods=["GET"])
 @login_required
-@load_model(Pdf)  # type: ignore
+@load_model(Pdf)
 def show(pdf):
     return jsonify(
         {
