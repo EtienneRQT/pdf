@@ -10,6 +10,6 @@
 <input
 	use:typeAction
 	bind:value
-	class="py-3 px-4 block w-full border border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500"
+	class="py-2 px-3 block w-full border-2 border-gray-300 rounded-lg text-sm focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200 ease-in-out shadow-sm hover:shadow-md"
 	required
 />

@@ -25,7 +25,7 @@ def load_model(Model: Model, extract_id_lambda=None):
 
             instance = Model.find_by(id=model_id)
 
-            if instance.user_id != g.user.id:
+            if instance.user_id != g.user.id:  # type: ignore
                 raise Unauthorized("You are not authorized to view this.")
 
             if model_id_name in kwargs:

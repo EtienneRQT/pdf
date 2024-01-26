@@ -13,9 +13,9 @@
 {#if $$slots.default && $width === 100}
 	<slot />
 {:else}
-	<div class="flex my-3 w-full h-1.5 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
+	<div class="flex my-4 w-full h-2.5 bg-gray-200 rounded-full overflow-hidden shadow-inner dark:bg-gray-700">
 		<div
-			class="flex flex-col justify-center overflow-hidden bg-blue-800"
+			class="flex flex-col justify-center bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-500 ease-in-out"
 			role="progressbar"
 			style="width: {$width}%"
 		/>
