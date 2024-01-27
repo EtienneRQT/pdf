@@ -17,7 +17,7 @@ def allowed_file(filename):
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
-    if "file" not in request.headers:
+    if "file" not in request.files:
         return jsonify({"message": "No file part in the request"}, 400)
     file = request.files["file"]
 
