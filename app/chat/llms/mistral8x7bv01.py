@@ -16,7 +16,6 @@ def build_llm(chat_args: ChatArgs):
         "repetition_penalty": 1.2,
         "max_new_tokens": 250,
         "top_p": 0.9,
-        "stream": chat_args.streaming,
     }
 
     return llm
