@@ -4,6 +4,6 @@ from app.chat.chains.traceable import TraceableChain
 
 
 class StreamingConversationalRetrievalChain(
-    TraceableChain, StreamableChain, ConversationalRetrievalChain
+    StreamableChain, ConversationalRetrievalChain
 ):
     pass

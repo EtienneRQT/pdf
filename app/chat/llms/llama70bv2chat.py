@@ -4,7 +4,7 @@ from app.chat.models import ChatArgs
 import os
 
 
-os.environ["DEEPINFRA_API_TOKEN"] = os.getenv("DEEPINFRA_API_TOKEN")  # type: ignore  # type: ignore
+os.environ["DEEPINFRA_API_TOKEN"] = os.getenv("DEEPINFRA_API_TOKEN")  # type: ignore
 
 
 def build_llm(chat_args: ChatArgs):
