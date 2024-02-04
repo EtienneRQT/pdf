@@ -34,18 +34,15 @@ def create_message(conversation):
     chat_args = ChatArgs(
         conversation_id=conversation.id,
         pdf_id=pdf.id,
-        streaming=streaming,
+        streaming=streaming,  # type: ignore
         metadata={
             "conversation_id": conversation.id,
             "user_id": g.user.id,
             "pdf_id": pdf.id,
-        },
+        },  # type: ignore
     )
 
     chat = build_chat(chat_args)
-
-    if not chat:
-        return "Chat not yet implemented!"
 
     if streaming:
         return Response(
