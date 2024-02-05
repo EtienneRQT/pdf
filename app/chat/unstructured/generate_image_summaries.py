@@ -1,5 +1,4 @@
 import os
-import base64
 from app.chat.unstructured.encode_image import encode_image
 from app.chat.unstructured.image_summarize import image_summarize
 
