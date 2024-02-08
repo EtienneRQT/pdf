@@ -2,14 +2,19 @@ from typing import Iterable, List
 from langchain_core.documents import Document
 from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_community.document_loaders import UnstructuredPDFLoader
+from langchain_openai import OpenAIEmbeddings
 from unstructured.cleaners.core import (
     clean_extra_whitespace,
 )
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import Chroma
 from app.chat.vector_stores.pinecone import vector_store
 from app.chat.unstructured.categorize_elements import categorize_elements
 from app.chat.unstructured.partition_pdf import pdf_elements
 from app.chat.unstructured.generate_text_summaries import generate_text_summaries
+from app.chat.unstructured.generate_image_summaries import generate_img_summaries
+import app.chat.multi_vector_retriever.create_multi_vector_retriever as mvr
+from app.chat.unstructured.multi_modal_rag_chain import multi_modal_rag_chain
 
 
 def create_embeddings_for_pdf(pdf_id: str, pdf_path: str):
@@ -40,6 +45,34 @@ def create_embeddings_for_pdf(pdf_id: str, pdf_path: str):
         )
 
     vector_store.add_documents(documents=docs)
+
+    texts, tables = categorize_elements(pdf_elements)
+    text_summaries2, table_summaries = generate_text_summaries(
+        texts[9:], tables, summarize_texts=True
+    )
+
+    fpath = "./"
+    # Image summaries
+    img_base64_list, image_summaries = generate_img_summaries(fpath)
+
+    # The vectorstore to use to index the summaries
+    vectorstore = Chroma(
+        collection_name="mm_rag_mistral",
+        embedding_function=OpenAIEmbeddings(model="text-embedding-3-small"),
+    )
+
+    # Create retriever
+    retriever_multi_vector_img = mvr.create_multi_vector_retriever(
+        vectorstore,
+        text_summaries,
+        texts,
+        table_summaries,
+        tables,
+        image_summaries,
+        img_base64_list,
+    )
+
+    chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_img)
 
 
 def delete_embeddings_for_pdf(pdf_id: str):

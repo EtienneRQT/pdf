@@ -3,8 +3,6 @@ import uuid
 from langchain.retrievers.multi_vector import MultiVectorRetriever
 from langchain.schema.document import Document
 from langchain.storage import InMemoryStore
-from langchain.vectorstores import Chroma
-from app.chat.embeddings.openai import embeddings
 
 
 def create_multi_vector_retriever(
@@ -47,10 +45,3 @@ def create_multi_vector_retriever(
         add_documents(retriever, image_summaries, images)
 
     return retriever
-
-
-# The vectorstore to use to index the summaries
-vectorstore = Chroma(
-    collection_name="mm_rag_mistral",
-    embedding_function=embeddings,
-)
