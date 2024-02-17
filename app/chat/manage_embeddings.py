@@ -7,7 +7,7 @@ from unstructured.cleaners.core import (
     clean_extra_whitespace,
 )
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores.chroma import Chroma
 from app.chat.vector_stores.pinecone import vector_store
 from app.chat.unstructured.categorize_elements import categorize_elements
 from app.chat.unstructured.partition_pdf import pdf_elements
@@ -25,33 +25,33 @@ def create_embeddings_for_pdf(pdf_id: str, pdf_path: str):
         texts[9:], tables, summarize_texts=True
     )
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+    # text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
 
-    loader = UnstructuredPDFLoader(
-        file_path=pdf_path,
-        post_processors=[
-            clean_extra_whitespace,
-        ],
-    )
+    # loader = UnstructuredPDFLoader(
+    #     file_path=pdf_path,
+    #     post_processors=[
+    #         clean_extra_whitespace,
+    #     ],
+    # )
 
-    docs: List[Document] = loader.load_and_split(text_splitter=text_splitter)
+    # docs: List[Document] = loader.load_and_split(text_splitter=text_splitter)
 
-    for doc in docs:
-        doc.metadata.update(
-            {
-                "text": doc.page_content,
-                "pdf_id": pdf_id,
-            }
-        )
+    # for doc in docs:
+    #     doc.metadata.update(
+    #         {
+    #             "text": doc.page_content,
+    #             "pdf_id": pdf_id,
+    #         }
+    #     )
 
-    vector_store.add_documents(documents=docs)
+    # vector_store.add_documents(documents=docs)
 
     texts, tables = categorize_elements(pdf_elements)
     text_summaries2, table_summaries = generate_text_summaries(
         texts[9:], tables, summarize_texts=True
     )
 
-    fpath = "./"
+    fpath = "./images"
     # Image summaries
     img_base64_list, image_summaries = generate_img_summaries(fpath)
 
@@ -62,17 +62,6 @@ def create_embeddings_for_pdf(pdf_id: str, pdf_path: str):
     )
 
     # Create retriever
-    retriever_multi_vector_img = mvr.create_multi_vector_retriever(
-        vectorstore,
-        text_summaries,
-        texts,
-        table_summaries,
-        tables,
-        image_summaries,
-        img_base64_list,
-    )
-
-    chain_multimodal_rag = multi_modal_rag_chain(retriever_multi_vector_img)
 
 
 def delete_embeddings_for_pdf(pdf_id: str):

@@ -3,6 +3,8 @@ import uuid
 from langchain.retrievers.multi_vector import MultiVectorRetriever
 from langchain.schema.document import Document
 from langchain.storage import InMemoryStore
+from langchain_community.vectorstores.chroma import Chroma
+from langchain_openai import OpenAIEmbeddings
 
 
 def create_multi_vector_retriever(
@@ -45,3 +47,12 @@ def create_multi_vector_retriever(
         add_documents(retriever, image_summaries, images)
 
     return retriever
+
+
+vectorstore = Chroma(
+    collection_name="mm_rag_mistral",
+    embedding_function=OpenAIEmbeddings(model="text-embedding-3-small"),
+)
+
+# Create retriever
+
