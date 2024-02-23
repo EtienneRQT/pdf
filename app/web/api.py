@@ -59,6 +59,8 @@ def set_conversation_components(
     conversation_id: str, llm: str, retriever: str, memory: str
 ) -> None:
     """
+    Sets the components used by a conversation.
+    Updates the LLM, retriever, and memory components for the given conversation.
     Sets the components used by a conversation
     """
     conversation = Conversation.find_by(id=conversation_id)

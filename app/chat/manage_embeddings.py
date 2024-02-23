@@ -61,8 +61,10 @@ def create_embeddings_for_pdf(pdf_id: str, pdf_path: str):
         embedding_function=OpenAIEmbeddings(model="text-embedding-3-small"),
     )
 
-    # Create retriever
-
 
 def delete_embeddings_for_pdf(pdf_id: str):
+    """Deletes embeddings for the given PDF ID.
+    Args:
+        pdf_id (str): The ID of the PDF to delete embeddings for.
+    """
     vector_store.delete(filter={"pdf_id": pdf_id})

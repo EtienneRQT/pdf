@@ -16,13 +16,28 @@ from app.chat.unstructured.partition_pdf import pdf_elements
 
 
 def build_chat(chat_args: ChatArgs):
+    """
+    Builds a conversational chatbot agent using a retrieval chain.
+
+    First, initializes the necessary components:
+    - Retriever for retrieving relevant documents
+    - LLMs for generating responses
+    - Memory for tracking conversation state
+    - Vectorstore and multi-vector retriever for handling multi-modal input
+    - Chains for chaining different capabilities like RAG for unstructured data
+
+    Then generates summaries of text, tables, images to index for retrieval.
+    Invokes the multi-modal RAG chain on a sample query to demonstrate usage.
+
+    Finally, returns a StreamingConversationalRetrievalChain instance that combines all of these components.
+    """
     retriever = build_retriever(chat_args)
     llm = build_llm(chat_args)
     condense_question_llm = build_llm_for_condensed_question()
     memory = build_memory(chat_args)
 
-    fpath = "./images"
     # Image summaries
+    fpath = "./images"
     img_base64_list, image_summaries = generate_img_summaries(fpath)
 
     texts, tables = categorize_elements(pdf_elements)

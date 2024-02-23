@@ -18,6 +18,11 @@ def create_multi_vector_retriever(
     store = InMemoryStore()
     id_key = "doc_id"
 
+    vectorstore = Chroma(
+        collection_name="mm_rag_mistral",
+        embedding_function=OpenAIEmbeddings(model="text-embedding-3-small"),
+    )
+
     # Create the multi-vector retriever
     retriever = MultiVectorRetriever(
         vectorstore=vectorstore,
@@ -47,12 +52,3 @@ def create_multi_vector_retriever(
         add_documents(retriever, image_summaries, images)
 
     return retriever
-
-
-vectorstore = Chroma(
-    collection_name="mm_rag_mistral",
-    embedding_function=OpenAIEmbeddings(model="text-embedding-3-small"),
-)
-
-# Create retriever
-

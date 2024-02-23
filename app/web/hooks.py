@@ -10,6 +10,11 @@ from app.web.db.models import User, Model
 
 
 def load_model(Model: Model, extract_id_lambda=None):
+    """Decorates a view function to load a Model instance by ID.
+    Checks that the loaded model belongs to the current user before
+    passing it into the view.
+    """
+
     def decorator(view):
         @functools.wraps(view)
         def wrapped_view(**kwargs):
@@ -39,6 +44,11 @@ def load_model(Model: Model, extract_id_lambda=None):
 
 
 def login_required(view):
+    """Decorates a view function to require login.
+    If the user is not logged in, returns a 401 Unauthorized response.
+    Otherwise calls the view function normally.
+    """
+
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
@@ -49,11 +59,18 @@ def login_required(view):
 
 
 def add_headers(response):
+    """Add cache control headers.
+    Adds Cache-Control headers to prevent caching for the given response.
+    """
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     return response
 
 
 def load_logged_in_user():
+    """Loads the logged in user from the session.
+    Checks if a user_id is stored in the session, and gets that user from the
+    database if so. If not, sets user to None.
+    """
     user_id = session.get("user_id")
 
     if user_id is None:
@@ -66,6 +83,14 @@ def load_logged_in_user():
 
 
 def handle_file_upload(fn):
+    """Wraps a file upload handler to save uploaded files to temp.
+    This decorator takes a request handler `fn` that expects a `file` in
+    the request files. It saves the file to a temp path, and adds the
+    `file_id`, `file_path`, and `file_name` to the handler kwargs. This
+    allows the handler to work with the temp file instead of the raw
+    uploaded file.
+    """
+
     @functools.wraps(fn)
     def wrapped(*args, **kwargs):
         file = request.files["file"]
@@ -84,6 +109,12 @@ def handle_file_upload(fn):
 
 
 def handle_error(err):
+    """Handles API errors by logging and returning error responses.
+    Checks if the error is an expected exception type like IntegrityError,
+    NoResultFound etc. Logs the error, and returns a JSON response with an
+    appropriate error message and status code.
+    If it's an unknown error, it is raised.
+    """
     if isinstance(err, IntegrityError):
         logging.error(err)
         return {"message": "In use"}, 400

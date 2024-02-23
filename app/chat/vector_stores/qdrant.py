@@ -15,6 +15,12 @@ if collection_name:
 
 
 def build_retriever(chat_args: ChatArgs):
+    """Retrieve a retriever instance for searching the vector store.
+    Args:
+      chat_args: Chat arguments containing context like pdf_id.
+    Returns:
+      A retriever instance if the vector_store is configured, else None.
+    """
     search_kwargs = {"filter": {"pdf_id": chat_args.pdf_id}}
     if vector_store:
         return vector_store.as_retriever()
